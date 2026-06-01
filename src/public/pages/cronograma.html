@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="shortcut icon" href="images/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="css/index.css" />
+    <title>AquaMar | Cronograma</title>
+  </head>
+
+  <body class="bg-[#031421] text-white overflow-x-hidden">
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+
+    <header class="fixed top-0 left-0 w-full z-50 px-3 sm:px-6 py-4">
+      <nav
+        class="glass max-w-7xl mx-auto rounded-full px-4 sm:px-8 py-4 flex items-center justify-between"
+      >
+        <a class="font-bold text-2xl sm:text-3xl" href="/">AquaMar</a>
+
+        <div class="flex items-center gap-4 sm:gap-6 md:gap-10">
+          <a href="/" class="hover:scale-[1.05] transition"
+            ><i data-lucide="home"></i
+          ></a>
+          <a href="/cronograma" class="hover:scale-[1.05] transition"
+            ><i data-lucide="calendar-days"></i
+          ></a>
+          <a href="/animais" class="hover:scale-[1.05] transition"
+            ><i data-lucide="fish"></i
+          ></a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section
+        class="relative grid grid-cols-1 lg:grid-cols-2 items-start min-h-[100svh] px-4 sm:px-8 pt-24 sm:pt-32 pb-16 max-w-7xl mx-auto gap-10 lg:gap-14"
+      >
+        <div class="glass rounded-3xl p-4 sm:p-6 md:p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <i data-lucide="calendar-days" class="w-6 h-6 sm:w-8 sm:h-8"></i>
+            <span id="month-year" class="text-lg sm:text-xl font-bold"></span>
+          </div>
+
+          <div
+            id="days-container"
+            class="grid grid-cols-7 gap-1 sm:gap-2 text-center text-xs sm:text-sm md:text-base"
+          ></div>
+        </div>
+
+        <div class="glass rounded-3xl p-4 sm:p-6 md:p-8">
+          <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-4">
+            Programação do Dia
+          </h2>
+
+          <div id="event-container" class="space-y-3 sm:space-y-4">
+            <p class="text-white/50 text-sm sm:text-base leading-relaxed">
+              Selecione uma data para visualizar as atividades.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-white/10 mt-10">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8"
+      >
+        <div>
+          <h3 class="text-xl font-bold text-cyan-400">AquaMar</h3>
+          <p class="text-white/60 text-sm mt-2">
+            Experiência imersiva no universo marinho.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-3">Navegação</h4>
+          <ul class="text-white/60 text-sm space-y-2">
+            <li><a href="/">Home</a></li>
+            <li><a href="/animais">Animais</a></li>
+            <li><a href="/cronograma">Cronograma</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-3">Horário</h4>
+          <p class="text-white/60 text-sm">09h - 18h todos os dias</p>
+        </div>
+      </div>
+
+      <div class="text-center text-white/40 text-xs pb-6">© 2026 AquaMar</div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+    <script src="js/cronograma.js"></script>
+  </body>
+</html>

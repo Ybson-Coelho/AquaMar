@@ -4,7 +4,7 @@ const animais = [
         imagem: "images/animals/axolote.jpg",
         descricao:
             "O axolote é um anfíbio raro do México famoso por conseguir regenerar partes do corpo como patas, coração e até partes do cérebro.",
-        habitat: "Lagos e canais de água doce no México",
+        habitat: "Lagos de água doce no México",
         tamanho: "15 a 45 cm",
         status: "Em perigo crítico"
     },

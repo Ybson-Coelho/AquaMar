@@ -130,11 +130,11 @@ body {
 
 .logo-float {
   animation: float 5s ease-in-out infinite;
-  filter: drop-shadow(0 0 40px rgba(34, 211, 238, 0.171)) drop-shadow(0 0 100px rgba(34, 211, 238, 0.048));
+  filter: drop-shadow(0 0 40px rgba(34, 211, 238, 0.171))
+    drop-shadow(0 0 100px rgba(34, 211, 238, 0.048));
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px) rotate(-1deg);
@@ -145,8 +145,7 @@ body {
   }
 }
 
-@media (max-width: 768px) {
-
+@media (max-width: 640px) {
   .bubble:nth-child(4),
   .bubble:nth-child(7),
   .bubble:nth-child(10) {

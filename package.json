@@ -1,0 +1,15 @@
+{
+  "name": "aquamar",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "bun --watch src/server.js",
+    "start": "bun src/server.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
