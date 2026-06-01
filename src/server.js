@@ -20,6 +20,9 @@ app.get("/:page", (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = 3000;
+  app.listen(PORT, () => console.log(`Servidor local na porta ${PORT}`));
+}
+
+export default app;
