@@ -32,6 +32,22 @@ const animals = [
     desc: "Pequeno e super colorido.",
   },
   {
+    name: "Peixe-borboleta listrado",
+    category: "fish",
+    image: "images/animals/peixe-borboleta-listrado.jpg",
+    habitat: "Recifes de coral",
+    size: "12 - 22cm",
+    desc: "Peixe tropical com listras marcantes e cores vibrantes.",
+  },
+  {
+    name: "Marimbau",
+    category: "fish",
+    image: "images/animals/marimbau.jpg",
+    habitat: "Rios e lagoas de água doce",
+    size: "20 - 40cm",
+    desc: "Peixe de água doce encontrado em diversas regiões do Brasil.",
+  },
+  {
     name: "Golfinho",
     category: "mammal",
     image: "images/animals/golfinho.webp",

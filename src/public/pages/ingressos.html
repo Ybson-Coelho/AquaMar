@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
+    <link rel="stylesheet" href="css/index.css" />
+    <title>AquaMar | Comprar Ingressos</title>
+  </head>
+
+  <body class="bg-[#031421] text-white overflow-x-hidden">
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+      <div class="bubble"></div>
+    </div>
+
+    <header class="fixed top-0 left-0 w-full z-50 px-3 sm:px-6 py-4">
+      <nav
+        class="glass max-w-7xl mx-auto rounded-full px-4 sm:px-8 py-4 flex items-center justify-between"
+      >
+        <a class="font-bold text-2xl sm:text-3xl" href="/">AquaMar</a>
+
+        <div class="flex items-center gap-4 sm:gap-6 md:gap-10">
+          <a href="/" class="hover:scale-[1.05] transition"
+            ><i data-lucide="home"></i
+          ></a>
+          <a href="/cronograma" class="hover:scale-[1.05] transition"
+            ><i data-lucide="calendar-days"></i
+          ></a>
+          <a href="/animais" class="hover:scale-[1.05] transition"
+            ><i data-lucide="fish"></i
+          ></a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="pt-32 pb-16 px-4">
+      <section class="max-w-6xl mx-auto">
+        <div class="text-center mb-12">
+          <h1 class="text-5xl font-bold">
+            Comprar <span class="text-cyan-400">Ingressos</span>
+          </h1>
+
+          <p class="text-white/60 mt-4">
+            Escolha uma data disponível e garanta sua visita.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+          <div class="glass rounded-3xl p-8">
+            <h2 class="text-2xl font-bold mb-6">Escolha sua visita</h2>
+
+            <div class="space-y-4">
+              <input
+                id="nome"
+                type="text"
+                placeholder="Nome completo"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+              />
+
+              <input
+                id="email"
+                type="email"
+                placeholder="E-mail"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+              />
+
+              <select
+                id="tipo"
+                class="w-full bg-[#031421] border border-white/10 rounded-xl px-4 py-3"
+              >
+                <option value="Infantil">Infantil - R$29</option>
+                <option value="Adulto">Adulto - R$59</option>
+                <option value="VIP">VIP - R$99</option>
+              </select>
+
+              <input
+                id="quantidade"
+                type="number"
+                min="1"
+                value="1"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+              />
+
+              <select
+                id="dia"
+                class="w-full bg-[#031421] border border-white/10 rounded-xl px-4 py-3"
+              ></select>
+            </div>
+
+            <button
+              id="comprar"
+              class="w-full mt-6 bg-cyan-400 text-slate-900 py-4 rounded-full font-bold hover:scale-105 transition"
+            >
+              Comprar Ingresso
+            </button>
+          </div>
+
+          <div class="glass rounded-3xl p-8">
+            <h2 class="text-2xl font-bold mb-6">Eventos da Data</h2>
+
+            <div id="eventos-dia"></div>
+
+            <div class="border-t border-white/10 my-6"></div>
+
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span>Ingresso</span>
+                <span id="resumoTipo"> Adulto </span>
+              </div>
+
+              <div class="flex justify-between">
+                <span>Quantidade</span>
+                <span id="resumoQuantidade"> 1 </span>
+              </div>
+
+              <div class="flex justify-between text-xl font-bold">
+                <span>Total</span>
+
+                <span id="total" class="text-cyan-400"> R$ 59 </span>
+              </div>
+            </div>
+            <div
+              id="resultado"
+              class="hidden mt-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30"
+            ></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-white/10 mt-10">
+      <div
+        class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8"
+      >
+        <div>
+          <h3 class="text-xl font-bold text-cyan-400">AquaMar</h3>
+          <p class="text-white/60 text-sm mt-2">
+            Experiência imersiva no universo marinho.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-3">Navegação</h4>
+          <ul class="text-white/60 text-sm space-y-2">
+            <li><a href="/">Home</a></li>
+            <li><a href="/animais">Animais</a></li>
+            <li><a href="/cronograma">Cronograma</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-semibold mb-3">Horário</h4>
+          <p class="text-white/60 text-sm">09h - 18h todos os dias</p>
+        </div>
+      </div>
+
+      <div class="text-center text-white/40 text-xs pb-6">© 2026 AquaMar</div>
+    </footer>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+    <script src="js/ingressos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </body>
+</html>
