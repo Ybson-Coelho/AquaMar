@@ -323,6 +323,8 @@ document.getElementById("comprar").addEventListener("click", async () => {
       pdf.setFontSize(24);
 
       dados.ingresso.eventos.forEach((evento) => {
+        pdf.setDrawColor(255, 255, 255);
+
         pdf.roundedRect(800, eventY - 30, 500, 60, 10, 10);
 
         pdf.text(evento.title, 830, eventY);
