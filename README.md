@@ -2,6 +2,11 @@
 
 AquaMar é uma plataforma web desenvolvida para proporcionar uma experiência completa aos visitantes de um aquário. Através dela, os usuários podem explorar informações sobre os animais, acompanhar eventos e cronogramas, além de comprar ingressos de forma simples e rápida.
 
+## 🎓 Projeto Acadêmico
+
+O AquaMar foi desenvolvido como projeto acadêmico para uma disciplina do curso técnico do Instituto Federal (IF), com o objetivo de aplicar conhecimentos de desenvolvimento web, organização de sistemas e experiência do usuário na construção de uma aplicação funcional.
+O projeto simula a plataforma de um aquário, permitindo que visitantes consultem informações sobre espécies marinhas, acompanhem eventos e realizem a compra de ingressos online.
+
 ## 🌊 Funcionalidades
 
 - 🎟️ Compra de ingressos online
