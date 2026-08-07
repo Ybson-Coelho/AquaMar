@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme inline {
+}
+
+body {
+  background: #031421;
+  color: #fff;
+  font-family: "Nunito", Arial, Helvetica, sans-serif;
+}
+
+.glass {
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+
+  backdrop-filter: blur(10px);
+}
+
+
+.logo-float {
+  animation: float 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 40px rgba(34, 211, 238, 0.171))
+    drop-shadow(0 0 100px rgba(34, 211, 238, 0.048));
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(-24px) rotate(1deg);
+  }
+}
