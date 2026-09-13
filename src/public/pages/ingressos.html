@@ -6,11 +6,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon" />
     <link rel="stylesheet" href="css/index.css" />
-    <title>AquaMar | Comprar Ingressos</title>
+    <title>AquaMar | Reserva de Ingressos</title>
   </head>
 
   <body class="bg-[#031421] text-white overflow-x-hidden">
-    <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
       <div class="bubble"></div>
       <div class="bubble"></div>
       <div class="bubble"></div>
@@ -30,14 +30,26 @@
         <a class="font-bold text-2xl sm:text-3xl" href="/">AquaMar</a>
 
         <div class="flex items-center gap-4 sm:gap-6 md:gap-10">
-          <a href="/" class="hover:scale-[1.05] transition"
+          <a href="/" class="hover:scale-[1.05] transition" title="Início"
             ><i data-lucide="home"></i
           ></a>
-          <a href="/cronograma" class="hover:scale-[1.05] transition"
+          <a
+            href="/cronograma"
+            class="hover:scale-[1.05] transition"
+            title="Cronograma"
             ><i data-lucide="calendar-days"></i
           ></a>
-          <a href="/animais" class="hover:scale-[1.05] transition"
+          <a
+            href="/animais"
+            class="hover:scale-[1.05] transition"
+            title="Animais"
             ><i data-lucide="fish"></i
+          ></a>
+          <a
+            href="/ingressos"
+            class="hover:scale-[1.05] transition text-cyan-400"
+            title="Ingressos"
+            ><i data-lucide="ticket"></i
           ></a>
         </div>
       </nav>
@@ -46,66 +58,196 @@
     <main class="pt-32 pb-16 px-4">
       <section class="max-w-6xl mx-auto">
         <div class="text-center mb-12">
-          <h1 class="text-5xl font-bold">
-            Comprar <span class="text-cyan-400">Ingressos</span>
+          <h1 class="text-4xl sm:text-5xl font-bold">
+            Reserva de <span class="text-cyan-400">Ingressos</span>
           </h1>
 
           <p class="text-white/60 mt-4">
-            Escolha uma data disponível e garanta sua visita.
+            Escolha uma data disponível e garanta seu código de reserva para
+            pagamento presencial.
           </p>
         </div>
 
-        <div class="grid lg:grid-cols-2 gap-8">
-          <div class="glass rounded-3xl p-8">
+        <div class="grid lg:grid-cols-2 gap-8 items-start">
+          <div class="glass rounded-3xl p-6 sm:p-8">
             <h2 class="text-2xl font-bold mb-6">Escolha sua visita</h2>
+
+            <div
+              class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 mb-6 text-sm text-white/70"
+            >
+              <p class="font-bold text-cyan-300 mb-1">Pagamento Presencial</p>
+              <p>
+                O código não é um ingresso pago. Ele representa uma reserva ou
+                atendimento prévio. O pagamento será realizado presencialmente
+                no Aquário Aquamar.
+              </p>
+            </div>
 
             <div class="space-y-4">
               <input
                 id="nome"
                 type="text"
                 placeholder="Nome completo"
-                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-cyan-400 outline-none transition"
               />
 
               <input
                 id="email"
                 type="email"
                 placeholder="E-mail"
-                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-cyan-400 outline-none transition"
               />
 
-              <select
-                id="tipo"
-                class="w-full bg-[#031421] border border-white/10 rounded-xl px-4 py-3"
-              >
-                <option value="Infantil">Infantil - R$29</option>
-                <option value="Adulto">Adulto - R$59</option>
-                <option value="VIP">VIP - R$99</option>
-              </select>
-
               <input
-                id="quantidade"
-                type="number"
-                min="1"
-                value="1"
-                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3"
+                id="telefone"
+                type="tel"
+                placeholder="Telefone / WhatsApp"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-cyan-400 outline-none transition"
               />
 
               <select
                 id="dia"
-                class="w-full bg-[#031421] border border-white/10 rounded-xl px-4 py-3"
+                class="w-full bg-[#031421] border border-white/10 rounded-xl px-4 py-3 focus:border-cyan-400 outline-none transition cursor-pointer"
               ></select>
+            </div>
+            <div class="mt-6 pt-6 border-t border-white/10 space-y-3">
+              <p class="font-semibold text-sm text-cyan-300 mb-2">
+                Selecione a quantidade de ingressos
+              </p>
+
+              <div
+                class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-between"
+              >
+                <div>
+                  <p class="font-semibold">Adulto</p>
+                  <p class="text-xs text-white/60">A partir de 13 anos</p>
+                  <p class="text-sm font-bold text-cyan-400 mt-1">R$ 59</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="Adulto"
+                    data-action="diminuir"
+                  >
+                    -
+                  </button>
+                  <span id="qtd-Adulto" class="w-6 text-center font-bold"
+                    >1</span
+                  >
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="Adulto"
+                    data-action="aumentar"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-between"
+              >
+                <div>
+                  <p class="font-semibold">Infantil</p>
+                  <p class="text-xs text-white/60">Crianças de 3 a 12 anos</p>
+                  <p class="text-sm font-bold text-cyan-400 mt-1">R$ 29</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="Infantil"
+                    data-action="diminuir"
+                  >
+                    -
+                  </button>
+                  <span id="qtd-Infantil" class="w-6 text-center font-bold"
+                    >0</span
+                  >
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="Infantil"
+                    data-action="aumentar"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <div
+                class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-between"
+              >
+                <div>
+                  <p class="font-semibold">Meia-Entrada</p>
+                  <p class="text-xs text-white/60">Estudantes, idosos e PCD</p>
+                  <p class="text-sm font-bold text-cyan-400 mt-1">R$ 29</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="Meia"
+                    data-action="diminuir"
+                  >
+                    -
+                  </button>
+                  <span id="qtd-Meia" class="w-6 text-center font-bold">0</span>
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="Meia"
+                    data-action="aumentar"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <!-- VIP -->
+              <div
+                class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-between"
+              >
+                <div>
+                  <p class="font-semibold">VIP</p>
+                  <p class="text-xs text-white/60">
+                    Acesso prioritário + bastidores
+                  </p>
+                  <p class="text-sm font-bold text-cyan-400 mt-1">R$ 99</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="VIP"
+                    data-action="diminuir"
+                  >
+                    -
+                  </button>
+                  <span id="qtd-VIP" class="w-6 text-center font-bold">0</span>
+                  <button
+                    type="button"
+                    class="qtd-btn w-8 h-8 rounded-full glass hover:scale-105 transition flex items-center justify-center font-bold cursor-pointer"
+                    data-tipo="VIP"
+                    data-action="aumentar"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
             </div>
 
             <button
               id="comprar"
-              class="w-full mt-6 bg-cyan-400 text-slate-900 py-4 rounded-full font-bold hover:scale-105 transition"
+              class="w-full mt-6 bg-cyan-400 text-slate-900 py-4 rounded-full font-bold hover:scale-105 transition cursor-pointer"
             >
-              Comprar Ingresso
+              Confirmar Reserva
             </button>
           </div>
 
-          <div class="glass rounded-3xl p-8">
+          <div class="glass rounded-3xl p-6 sm:p-8">
             <h2 class="text-2xl font-bold mb-6">Eventos da Data</h2>
 
             <div id="eventos-dia"></div>
@@ -113,26 +255,77 @@
             <div class="border-t border-white/10 my-6"></div>
 
             <div class="space-y-3">
-              <div class="flex justify-between">
-                <span>Ingresso</span>
-                <span id="resumoTipo"> Adulto </span>
-              </div>
+              <div id="resumoItens" class="space-y-2 text-white/80"></div>
 
               <div class="flex justify-between">
-                <span>Quantidade</span>
-                <span id="resumoQuantidade"> 1 </span>
+                <span>Quantidade total</span>
+                <span id="resumoQuantidade">1</span>
               </div>
 
-              <div class="flex justify-between text-xl font-bold">
-                <span>Total</span>
-
-                <span id="total" class="text-cyan-400"> R$ 59 </span>
+              <div
+                class="flex justify-between text-xl font-bold pt-2 border-t border-white/10"
+              >
+                <span>Total a pagar no local</span>
+                <span id="total" class="text-cyan-400">R$ 59</span>
               </div>
             </div>
+
             <div
               id="resultado"
-              class="hidden mt-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30"
-            ></div>
+              class="hidden mt-6 p-6 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 space-y-4"
+            >
+              <div
+                class="flex items-center gap-2 font-bold text-lg text-cyan-300"
+              >
+                <i data-lucide="party-popper"></i>
+                <span>Reserva Confirmada</span>
+              </div>
+
+              <div
+                class="p-4 rounded-xl bg-white/5 border border-white/10 text-center"
+              >
+                <p
+                  class="text-xs text-white/50 mb-1 font-semibold uppercase tracking-wider"
+                >
+                  Código da sua Reserva
+                </p>
+                <p
+                  id="resCodigo"
+                  class="text-3xl font-bold text-cyan-400 tracking-wider"
+                >
+                  AQM-XXXXXX
+                </p>
+              </div>
+
+              <div
+                class="p-4 rounded-xl bg-white/5 border border-white/10 text-xs text-white/70 leading-relaxed"
+              >
+                <strong>Atenção:</strong> O código não é um ingresso pago. Ele
+                representa uma reserva ou atendimento prévio. O pagamento será
+                realizado presencialmente no Aquário Aquamar.
+              </div>
+
+              <div
+                id="resumoConfirmacao"
+                class="space-y-1.5 text-sm text-white/80"
+              ></div>
+
+              <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button
+                  id="btnCopiar"
+                  class="flex-1 glass py-3 rounded-full font-semibold text-sm hover:scale-105 transition cursor-pointer"
+                >
+                  Copiar Código
+                </button>
+
+                <button
+                  id="btnPdf"
+                  class="flex-1 bg-cyan-400 text-slate-900 py-3 rounded-full font-bold text-sm hover:scale-105 transition cursor-pointer"
+                >
+                  Baixar Comprovante
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -152,15 +345,33 @@
         <div>
           <h4 class="font-semibold mb-3">Navegação</h4>
           <ul class="text-white/60 text-sm space-y-2">
-            <li><a href="/">Home</a></li>
-            <li><a href="/animais">Animais</a></li>
-            <li><a href="/cronograma">Cronograma</a></li>
+            <li><a href="/" class="hover:text-cyan-300 transition">Home</a></li>
+            <li>
+              <a href="/animais" class="hover:text-cyan-300 transition"
+                >Animais</a
+              >
+            </li>
+            <li>
+              <a href="/cronograma" class="hover:text-cyan-300 transition"
+                >Cronograma</a
+              >
+            </li>
+            <li>
+              <a href="/ingressos" class="hover:text-cyan-300 transition"
+                >Ingressos</a
+              >
+            </li>
+            <li>
+              <a href="/validacao" class="hover:text-cyan-300 transition"
+                >Validação</a
+              >
+            </li>
           </ul>
         </div>
 
         <div>
           <h4 class="font-semibold mb-3">Horário</h4>
-          <p class="text-white/60 text-sm">09h - 18h todos os dias</p>
+          <p class="text-white/60 text-sm">09h - 22h todos os dias</p>
         </div>
       </div>
 
@@ -168,10 +379,7 @@
     </footer>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-      lucide.createIcons();
-    </script>
-    <script src="js/ingressos.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/ingressos.js"></script>
   </body>
 </html>

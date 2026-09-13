@@ -194,5 +194,12 @@ function showEvents(day) {
         )
         .join("")}
     </div>
+
+    <a
+      href="/ingressos?dia=${day}"
+      class="block text-center mt-6 bg-cyan-400 text-slate-900 py-3 rounded-full font-bold hover:scale-105 transition cursor-pointer"
+    >
+      Reservar Ingressos para este Dia
+    </a>
   `;
 }

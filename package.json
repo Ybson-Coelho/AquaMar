@@ -10,8 +10,6 @@
     "@types/bun": "latest"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "mongoose": "^9.6.3"
+    "express": "^5.2.1"
   }
 }

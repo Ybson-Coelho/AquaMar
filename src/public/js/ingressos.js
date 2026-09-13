@@ -98,76 +98,163 @@ const events = {
 };
 
 const precos = {
-  Infantil: 29,
   Adulto: 59,
+  Infantil: 29,
+  Meia: 29,
   VIP: 99,
 };
 
+const quantidades = {
+  Adulto: 1,
+  Infantil: 0,
+  Meia: 0,
+  VIP: 0,
+};
+
 const diaSelect = document.getElementById("dia");
+const eventosContainer = document.getElementById("eventos-dia");
+const resumoItens = document.getElementById("resumoItens");
+const resumoQuantidade = document.getElementById("resumoQuantidade");
+const totalEl = document.getElementById("total");
+const btnComprar = document.getElementById("comprar");
 
-Object.keys(events).forEach((dia) => {
-  const option = document.createElement("option");
+const resultado = document.getElementById("resultado");
+const resCodigo = document.getElementById("resCodigo");
+const resumoConfirmacao = document.getElementById("resumoConfirmacao");
+const btnCopiar = document.getElementById("btnCopiar");
+const btnPdf = document.getElementById("btnPdf");
 
-  option.value = dia;
-  option.textContent = `Dia ${dia}`;
+let ultimaReserva = null;
 
-  diaSelect.appendChild(option);
-});
+function inicializarDias() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const diaParam = urlParams.get("dia");
+
+  diaSelect.innerHTML = "";
+  Object.keys(events).forEach((dia) => {
+    const option = document.createElement("option");
+    option.value = dia;
+    option.textContent = `Dia ${dia}`;
+    if (diaParam && String(dia) === String(diaParam)) {
+      option.selected = true;
+    }
+    diaSelect.appendChild(option);
+  });
+}
 
 function atualizarEventos() {
   const dia = diaSelect.value;
+  const eventos = events[dia] || [];
 
-  const container = document.getElementById("eventos-dia");
+  if (eventos.length === 0) {
+    eventosContainer.innerHTML = `
+      <p class="text-white/50 text-sm">Nenhum evento especial nesta data.</p>
+    `;
+    return;
+  }
 
-  container.innerHTML = events[dia]
+  eventosContainer.innerHTML = eventos
     .map(
       (evento) => `
         <div class="p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/20 mb-3">
-          <p class="font-semibold">
-            ${evento.title}
-          </p>
-
-          <p class="text-cyan-300">
-            ${evento.time}
-          </p>
+          <p class="font-semibold">${evento.title}</p>
+          <p class="text-cyan-300 text-sm mt-0.5">${evento.time}</p>
         </div>
       `,
     )
     .join("");
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 }
 
 function atualizarTotal() {
-  const tipo = document.getElementById("tipo").value;
+  let total = 0;
+  let totalQtd = 0;
+  let itensHtml = "";
 
-  const quantidade = Number(document.getElementById("quantidade").value);
+  Object.entries(quantidades).forEach(([tipo, qtd]) => {
+    if (qtd > 0) {
+      const subtotal = precos[tipo] * qtd;
+      total += subtotal;
+      totalQtd += qtd;
 
-  document.getElementById("resumoTipo").textContent = tipo;
+      const nomeTipo =
+        tipo === "Meia" ? "Meia-Entrada" : tipo === "VIP" ? "Passe VIP" : tipo;
 
-  document.getElementById("resumoQuantidade").textContent = quantidade;
+      itensHtml += `
+        <div class="flex justify-between text-sm">
+          <span>${qtd}x ${nomeTipo}</span>
+          <span class="text-cyan-300 font-semibold">R$ ${subtotal}</span>
+        </div>
+      `;
+    }
+  });
 
-  document.getElementById("total").textContent = `R$ ${
-    precos[tipo] * quantidade
-  }`;
+  if (totalQtd === 0) {
+    itensHtml = `<p class="text-xs text-white/50">Nenhum ingresso selecionado.</p>`;
+  }
+
+  resumoItens.innerHTML = itensHtml;
+  resumoQuantidade.textContent = totalQtd;
+  totalEl.textContent = `R$ ${total}`;
 }
+
+document.querySelectorAll(".qtd-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const tipo = btn.dataset.tipo;
+    const action = btn.dataset.action;
+
+    if (action === "aumentar") {
+      const totalAtual = Object.values(quantidades).reduce((a, b) => a + b, 0);
+      if (totalAtual >= 10) {
+        alert("Você pode reservar no máximo 10 ingressos por vez.");
+        return;
+      }
+      quantidades[tipo]++;
+    } else if (action === "diminuir") {
+      if (quantidades[tipo] > 0) {
+        quantidades[tipo]--;
+      }
+    }
+
+    const spanQtd = document.getElementById(`qtd-${tipo}`);
+    if (spanQtd) {
+      spanQtd.textContent = quantidades[tipo];
+    }
+
+    atualizarTotal();
+  });
+});
 
 diaSelect.addEventListener("change", atualizarEventos);
 
-document.getElementById("tipo").addEventListener("change", atualizarTotal);
+function gerarCodigoUnico(reservas) {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let codigo = "";
+  let existe = true;
 
-document.getElementById("quantidade").addEventListener("input", atualizarTotal);
+  while (existe) {
+    let rand = "";
+    for (let i = 0; i < 6; i++) {
+      rand += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    codigo = `AQM-${rand}`;
+    existe = reservas.some((r) => r.codigo === codigo);
+  }
 
-atualizarEventos();
-atualizarTotal();
+  return codigo;
+}
 
-document.getElementById("comprar").addEventListener("click", async () => {
+btnComprar.addEventListener("click", () => {
   const nome = document.getElementById("nome").value.trim();
   const email = document.getElementById("email").value.trim();
-  const tipo = document.getElementById("tipo").value;
-  const quantidade = Number(document.getElementById("quantidade").value);
+  const telefone = document.getElementById("telefone").value.trim();
   const dia = diaSelect.value;
 
   if (!nome) {
-    alert("Digite seu nome.");
+    alert("Digite seu nome completo.");
     return;
   }
 
@@ -186,165 +273,257 @@ document.getElementById("comprar").addEventListener("click", async () => {
     return;
   }
 
-  if (quantidade < 1) {
+  if (!telefone || telefone.length < 8) {
+    alert("Digite um número de telefone válido com DDD.");
+    return;
+  }
+
+  const totalQtd = Object.values(quantidades).reduce((a, b) => a + b, 0);
+  if (totalQtd < 1) {
     alert("A quantidade mínima é 1 ingresso.");
     return;
   }
 
-  if (quantidade > 10) {
-    alert("Você pode comprar no máximo 10 ingressos por vez.");
-    return;
-  }
+  let totalValor = 0;
+  const itens = [];
+  Object.entries(quantidades).forEach(([tipo, qtd]) => {
+    if (qtd > 0) {
+      const subtotal = precos[tipo] * qtd;
+      totalValor += subtotal;
+      itens.push({
+        tipo:
+          tipo === "Meia"
+            ? "Meia-Entrada"
+            : tipo === "VIP"
+              ? "Passe VIP"
+              : tipo,
+        quantidade: qtd,
+        precoUnitario: precos[tipo],
+        subtotal,
+      });
+    }
+  });
 
-  const total = precos[tipo] * quantidade;
+  const resumoTextoItens = itens
+    .map((i) => `${i.quantidade}x ${i.tipo}`)
+    .join(", ");
 
   const confirmar = confirm(
-    `Confirmar compra?\n\n` +
-      `Tipo: ${tipo}\n` +
-      `Quantidade: ${quantidade}\n` +
-      `Dia: ${dia}\n\n` +
-      `Total: R$ ${total}`,
+    `Confirmar pré-reserva?\n\n` +
+      `Nome: ${nome}\n` +
+      `Ingressos: ${resumoTextoItens}\n` +
+      `Dia: ${dia}\n` +
+      `Total a pagar no local: R$ ${totalValor}\n\n` +
+      `Lembre-se: o pagamento é realizado somente presencialmente no Aquário Aquamar.`,
   );
 
   if (!confirmar) {
     return;
   }
 
+  let reservas = [];
   try {
-    const resposta = await fetch("/api/ingressos", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        nome,
-        email,
-        tipo,
-        quantidade,
-        dia,
-        eventos: events[dia],
-      }),
+    const raw = localStorage.getItem("aquamar_reservas");
+    if (raw) reservas = JSON.parse(raw);
+  } catch (e) {
+    reservas = [];
+  }
+
+  const codigo = gerarCodigoUnico(reservas);
+
+  const novaReserva = {
+    codigo,
+    nome,
+    email,
+    telefone,
+    dia,
+    itens,
+    totalIngressos: totalQtd,
+    totalValor,
+    eventos: events[dia] || [],
+    status: "pendente",
+    criadoEm: new Date().toISOString(),
+    pagoEm: null,
+  };
+
+  reservas.unshift(novaReserva);
+  localStorage.setItem("aquamar_reservas", JSON.stringify(reservas));
+  ultimaReserva = novaReserva;
+
+  resultado.classList.remove("hidden");
+  resCodigo.textContent = codigo;
+
+  resumoConfirmacao.innerHTML = `
+    <p><strong>Titular:</strong> ${nome}</p>
+    <p><strong>Data:</strong> Dia ${dia} deste mês</p>
+    <p><strong>Ingressos:</strong> ${resumoTextoItens}</p>
+    <p><strong>Valor na bilheteria:</strong> <span class="text-cyan-400 font-bold">R$ ${totalValor}</span></p>
+  `;
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+
+  resultado.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+  alert(
+    `Reserva gerada com sucesso!\n\n` +
+      `Código: ${codigo}\n\n` +
+      `Apresente este código na bilheteria do Aquário Aquamar para efetuar o pagamento e retirar suas pulseiras de entrada.`,
+  );
+});
+
+btnCopiar.addEventListener("click", () => {
+  if (!ultimaReserva) return;
+
+  navigator.clipboard.writeText(ultimaReserva.codigo).then(() => {
+    btnCopiar.textContent = "Código Copiado!";
+    setTimeout(() => {
+      btnCopiar.textContent = "Copiar Código";
+    }, 2500);
+  });
+});
+
+btnPdf.addEventListener("click", () => {
+  if (!ultimaReserva) return;
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
     });
 
-    if (!resposta.ok) {
-      throw new Error();
-    }
+    pdf.setFillColor(3, 20, 33);
+    pdf.rect(0, 0, 210, 297, "F");
 
-    const dados = await resposta.json();
+    pdf.setFillColor(12, 51, 80);
+    pdf.roundedRect(15, 15, 180, 30, 4, 4, "F");
 
-    const resultado = document.getElementById("resultado");
+    pdf.setTextColor(34, 211, 238);
+    pdf.setFontSize(22);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("AQUAMAR", 25, 28);
 
-    resultado.classList.remove("hidden");
+    pdf.setTextColor(255, 255, 255);
+    pdf.setFontSize(11);
+    pdf.setFont("helvetica", "normal");
+    pdf.text("Comprovante de Reserva - Pagamento Presencial", 25, 37);
 
-    resultado.innerHTML = `
-      <h3 class="font-bold text-lg mb-3 flex items-center gap-2">
-        Compra realizada
-        <i data-lucide="party-popper"></i>
-      </h3>
+    pdf.setFillColor(12, 51, 80);
+    pdf.setDrawColor(34, 211, 238);
+    pdf.setLineWidth(0.6);
+    pdf.roundedRect(15, 52, 180, 28, 4, 4, "FD");
 
-      <p>
-        <strong>Código:</strong>
-        ${dados.ingresso.codigo}
-      </p>
+    pdf.setFontSize(9);
+    pdf.setTextColor(34, 211, 238);
+    pdf.text("CÓDIGO DA SUA RESERVA", 25, 62);
 
-      <p>
-        <strong>Tipo:</strong>
-        ${dados.ingresso.tipo}
-      </p>
+    pdf.setFontSize(20);
+    pdf.setFont("helvetica", "bold");
+    pdf.setTextColor(255, 255, 255);
+    pdf.text(ultimaReserva.codigo, 25, 73);
 
-      <p>
-        <strong>Quantidade:</strong>
-        ${dados.ingresso.quantidade}
-      </p>
+    pdf.setFillColor(18, 40, 60);
+    pdf.setDrawColor(255, 255, 255);
+    pdf.setLineWidth(0.2);
+    pdf.roundedRect(15, 86, 180, 24, 3, 3, "FD");
 
-      <p>
-        <strong>Dia:</strong>
-        ${dados.ingresso.dia}
-      </p>
-    `;
+    pdf.setFontSize(9);
+    pdf.setFont("helvetica", "bold");
+    pdf.setTextColor(34, 211, 238);
+    pdf.text("ATENÇÃO - PAGAMENTO SOMENTE PRESENCIAL", 20, 94);
 
-    lucide.createIcons();
-
-    alert(
-      `Compra realizada com sucesso!\n\n` + `Código: ${dados.ingresso.codigo}`,
+    pdf.setFontSize(8);
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(220, 230, 240);
+    pdf.text(
+      "O código não é um ingresso pago. Ele representa uma reserva ou atendimento prévio.",
+      20,
+      100,
+    );
+    pdf.text(
+      "O pagamento será realizado SOMENTE presencialmente no Aquário Aquamar na bilheteria.",
+      20,
+      105,
     );
 
-    const { jsPDF } = window.jspdf;
+    pdf.setFillColor(12, 51, 80);
+    pdf.roundedRect(15, 116, 180, 75, 4, 4, "F");
 
-    const pdf = new jsPDF({
-      orientation: "landscape",
-      unit: "px",
-      format: [1489, 785],
+    pdf.setFontSize(12);
+    pdf.setFont("helvetica", "bold");
+    pdf.setTextColor(34, 211, 238);
+    pdf.text("DETALHES DA VISITA", 25, 127);
+
+    pdf.setFontSize(10);
+    pdf.setFont("helvetica", "normal");
+    pdf.setTextColor(220, 230, 240);
+    pdf.text(`Titular: ${ultimaReserva.nome}`, 25, 137);
+    pdf.text(`E-mail: ${ultimaReserva.email}`, 25, 144);
+    pdf.text(`Telefone: ${ultimaReserva.telefone}`, 25, 151);
+    pdf.text(`Data: Dia ${ultimaReserva.dia} deste mês`, 25, 158);
+
+    let currY = 166;
+    pdf.text("Ingressos:", 25, currY);
+    currY += 6;
+    ultimaReserva.itens.forEach((it) => {
+      pdf.text(
+        `  • ${it.quantidade}x ${it.tipo} - R$ ${it.subtotal}`,
+        25,
+        currY,
+      );
+      currY += 6;
     });
 
-    const img = new Image();
+    pdf.setFont("helvetica", "bold");
+    pdf.setTextColor(34, 211, 238);
+    pdf.text(
+      `Total a pagar no local: R$ ${ultimaReserva.totalValor}`,
+      25,
+      currY + 4,
+    );
 
-    img.onload = () => {
-      pdf.addImage(img, "PNG", 0, 0, 1489, 785);
+    if (ultimaReserva.eventos && ultimaReserva.eventos.length > 0) {
+      pdf.setFillColor(12, 51, 80);
+      pdf.roundedRect(15, 198, 180, 45, 4, 4, "F");
 
+      pdf.setFontSize(11);
+      pdf.setFont("helvetica", "bold");
+      pdf.setTextColor(34, 211, 238);
+      pdf.text("PROGRAMAÇÃO DA DATA", 25, 209);
+
+      let evY = 217;
+      pdf.setFontSize(9);
+      pdf.setFont("helvetica", "normal");
       pdf.setTextColor(255, 255, 255);
-
-      pdf.setFontSize(42);
-
-      pdf.text("INGRESSO OFICIAL", 90, 180);
-
-      let y = 240;
-
-      pdf.setFontSize(26);
-
-      pdf.text(`Código: ${dados.ingresso.codigo}`, 90, y);
-
-      y += 50;
-
-      pdf.text(`Nome: ${dados.ingresso.nome}`, 90, y);
-
-      y += 50;
-
-      pdf.text(`Tipo: ${dados.ingresso.tipo}`, 90, y);
-
-      y += 50;
-
-      pdf.text(`Quantidade: ${dados.ingresso.quantidade}`, 90, y);
-
-      y += 50;
-
-      pdf.text(`Dia: ${dados.ingresso.dia}`, 90, y);
-
-      y += 50;
-
-      pdf.text(`Valor: R$ ${total}`, 90, y);
-
-      pdf.setFontSize(32);
-
-      pdf.text("PROGRAMAÇÃO", 800, 220);
-
-      let eventY = 280;
-
-      pdf.setFontSize(24);
-
-      dados.ingresso.eventos.forEach((evento) => {
-        pdf.setDrawColor(255, 255, 255);
-
-        pdf.roundedRect(800, eventY - 30, 500, 60, 10, 10);
-
-        pdf.text(evento.title, 830, eventY);
-
-        pdf.text(evento.time, 1180, eventY);
-
-        eventY += 90;
+      ultimaReserva.eventos.forEach((ev) => {
+        pdf.text(`• ${ev.title} (${ev.time})`, 28, evY);
+        evY += 6;
       });
+    }
 
-      pdf.setFontSize(18);
+    pdf.setFontSize(8);
+    pdf.setTextColor(180, 200, 215);
+    pdf.text(
+      `AquaMar • 09h - 22h todos os dias • Emitido em ${new Date().toLocaleString("pt-BR")}`,
+      105,
+      280,
+      { align: "center" },
+    );
 
-      pdf.text(`Emitido em ${new Date().toLocaleString("pt-BR")}`, 90, 700);
-
-      pdf.save(`Ingresso-${dados.ingresso.codigo}.pdf`);
-    };
-
-    img.src = "/images/ingresso.png";
-
-    img.src = "/images/ingresso.png";
-  } catch (error) {
-    alert("Não foi possível concluir a compra. Tente novamente.");
+    pdf.save(`Reserva-AquaMar-${ultimaReserva.codigo}.pdf`);
+  } catch (e) {
+    console.error("Erro ao gerar PDF:", e);
+    alert("Seu código de reserva está confirmado e salvo!");
   }
 });
+
+inicializarDias();
+atualizarEventos();
+atualizarTotal();
+
+if (window.lucide) {
+  window.lucide.createIcons();
+}
